@@ -1,42 +1,42 @@
 # ViennaRNA Visualization: Native Dimer & Local Duplex Mapping
 
-본 스킬은 ViennaRNA 물리 엔진과 커스텀 파이썬 렌더링 로직을 결합하여, 거대한 mRNA 내에서 센서가 결합하는 정밀한 dsRNA 하이브리드 구조를 시각화합니다. 
+This skill combines ViennaRNA physics engine with custom Python rendering logic to visualize precise dsRNA hybrid structures where sensors bind within large mRNA sequences.
 
-## 핵심 작동 원리 (3단계 과학적 추론)
+## Core Operating Principles (3-Stage Scientific Reasoning)
 
-본 스킬은 단순히 그림을 그리는 것이 아니라, 다음의 3단계 논리적 과정을 통해 결합 부위의 물리적 실체를 규명합니다.
+This skill doesn't just draw pictures - it identifies the physical reality of binding sites through the following 3-stage logical process.
 
-### 1. 최적 결합 위치 탐색 (`duplexfold`)
-거대한 mRNA(예: 5,200nt 이상) 내에서 센서가 결합할 최적의 좌표를 찾습니다. `RNA.duplexfold` 알고리즘을 사용하여 센서 서열을 mRNA 전체와 대조하고, **열역학적으로 에너지가 가장 낮고 안정적인(Minimum Free Energy) 결합 위치**를 물리적으로 계산하여 추출합니다.
+### 1. Optimal Binding Site Search (`duplexfold`)
+Find the optimal coordinates for sensor binding within large mRNA (e.g., 5,200+ nt). Use `RNA.duplexfold` algorithm to compare sensor sequence against the entire mRNA, physically calculating and extracting the **thermodynamically lowest energy and most stable (Minimum Free Energy) binding site**.
 
-### 2. 점-괄호(Dot-bracket) 표기법 해석
-물리 엔진이 계산한 결합 구조 데이터를 정밀하게 해석(Parsing)합니다.
-- **괄호 `(` 및 `)`**: 두 염기가 서로 수소 결합을 형성한 **'매치(Match/Binding)'** 상태를 의미합니다.
-- **점 `.`**: 마주 보는 짝이 없거나 에너지가 맞지 않아 결합하지 못한 **'미스매치(Mismatch)'** 또는 **'벌지(Bulge)'** 상태를 의미합니다.
+### 2. Dot-bracket Notation Parsing
+Precisely parse the binding structure data computed by the physics engine.
+- **Parentheses `(` and `)`**: Indicate **'Match/Binding'** state where two bases form hydrogen bonds.
+- **Dot `.`**: Indicates **'Mismatch'** or **'Bulge'** state where bases lack pairing partners or energy doesn't allow binding.
 
-### 3. 데이터 기반 커스텀 시각화 및 렌더링
-해석된 데이터를 바탕으로 파이썬 코드가 시각적 언어로 번역합니다.
-- **분류 및 채색**: 괄호(Match) 부위는 회색 선으로 잇고 연회색 구슬로 처리하며, 점(Bulge) 부위는 **강렬한 빨간색 구슬**로 강조하여 구조적 결함을 즉시 포착하게 합니다.
-- **좌표 배치 (`get_xy_coordinates`)**: 결합 정보(Match/Bulge)를 바탕으로, 결합 부위는 당기고 벌지 부위는 밀어내는 물리적 힘을 계산하여 2차원 좌표(X, Y)를 생성합니다.
-- **가독성 최적화**: dsRNA의 구조적 세부사항을 노출하기 위해 가닥 간 간격을 2배로 확장하고, 구슬(1/10)과 폰트(1/5) 크기를 미세하게 조정합니다.
+### 3. Data-driven Custom Visualization and Rendering
+Translate parsed data into visual language using Python code.
+- **Classification and Coloring**: Match regions (parentheses) are connected with gray lines and treated with light gray beads, while Bulge regions (dots) are emphasized with **intense red beads** for immediate structural defect detection.
+- **Coordinate Layout (`get_xy_coordinates`)**: Based on binding information (Match/Bulge), calculate 2D coordinates (X, Y) by computing physical forces that pull binding regions together and push bulge regions apart.
+- **Readability Optimization**: Expand strand spacing by 2x and finely adjust bead (1/10) and font (1/5) sizes to expose structural details of dsRNA.
 
-## 핵심 엔진 및 구현체 (Core Engine)
+## Core Engine and Implementation (Core Engine)
 
-본 스킬의 모든 과학적 추론과 렌더링 로직은 다음의 핵심 파이썬 엔진에 의해 실행됩니다.
+All scientific reasoning and rendering logic in this skill is executed by the following core Python engine.
 
-- **실행 엔진**: `scripts/visualize_binding.py`
-- **역할**: 
-    - 사용자로부터 입력받은 mRNA와 센서 서열을 ViennaRNA 물리 엔진에 전달.
-    - `duplexfold` 및 `cofold` 결과를 파싱하여 매치/벌지 데이터를 생성.
-    - `matplotlib`을 이용해 구슬 크기 조정, 가닥 간격 확장 등 커스텀 렌더링 수행.
-- **수정 지침**: 시각화의 비율(구슬 크기 등)이나 물리적 계산 파라미터를 변경하려면 이 파일을 수정해야 합니다.
+- **Execution Engine**: `scripts/visualize_binding.py`
+- **Role**: 
+    - Pass user-provided mRNA and sensor sequence to ViennaRNA physics engine.
+    - Parse `duplexfold` and `cofold` results to generate match/bulge data.
+    - Perform custom rendering with matplotlib including bead size adjustment and strand spacing expansion.
+- **Modification Guide**: Modify this file to change visualization ratios (bead size, etc.) or physics calculation parameters.
 
-## 표준 워크플로우
-1. **Input**: 타겟 mRNA(전체)와 센서 RNA 서열을 입력받습니다.
-2. **Fragmenting**: 센서 길이에 맞춰 양옆 50bp의 Flank를 포함한 약 300bp의 타겟 조각을 자동 추출합니다.
-3. **Layout**: 가닥의 끝이 말리지 않도록 선형(Naview) 레이아웃을 지향하며 물리적 좌표를 산출합니다.
-4. **Output**: 결합 에너지(MFE)와 함께 벌지가 강조된 고해상도 PNG 지도를 `outcome/` 폴더에 생성합니다.
+## Standard Workflow
+1. **Input**: Receive target mRNA (full) and sensor RNA sequence.
+2. **Fragmenting**: Automatically extract approximately 300bp target fragment including 50bp flanks on both sides.
+3. **Layout**: Generate physical coordinates using linear (Naview) layout to prevent strand ends from tangling.
+4. **Output**: Generate high-resolution PNG map with bulge emphasis along with binding energy (MFE) in `outcome/` folder.
 
-## 엔지니어링 지침
-- **Zero-Vision Guessing**: 모든 빨간색 점은 물리 엔진이 계산한 '실제 비결합 부위'이며, 사용자의 주관이 개입되지 않은 순수 데이터 결과임을 명심하십시오.
-- **Scalability**: 이 방식은 mRNA의 길이에 상관없이 항상 최적의 결합 부위를 찾아내어 정밀 맵핑을 수행할 수 있도록 설계되었습니다.
+## Engineering Guidelines
+- **Zero-Vision Guessing**: All red dots are 'actual non-binding sites' computed by the physics engine - pure data results without user bias.
+- **Scalability**: This approach is designed to always find optimal binding sites and perform precise mapping regardless of mRNA length.

@@ -1,29 +1,29 @@
 # ADAR-sensor: AI-powered RNA Sensor Design Platform
 
-ViennaRNA 물리 엔진과 AI 추론을 결합한 ADAR 편집 센서 설계 및 최적화 플랫폼입니다.
+An ADAR editing sensor design and optimization platform combining ViennaRNA physics engine with AI reasoning.
 
-## 주요 구성 요소
+## Main Components
 
-### 1. ViennaRNA 시각화 스킬 (`.gemini/skills/viennarna-visualization`)
-- **핵심 기능**: 거대한 mRNA 내에서 센서가 결합하는 dsRNA 하이브리드 구조 시각화
-- **작동 원리**:
-  1. `duplexfold`로 최적 결합 위치 탐색 (MFE 기반)
-  2. 점-괄호(Dot-bracket) 표기법 해석
-  3. 커스텀 matplotlib 렌더링
+### 1. ViennaRNA Visualization Skill (`.gemini/skills/viennarna-visualization`)
+- **Core Function**: Visualize dsRNA hybrid structures where sensors bind within large mRNA
+- **Operating Principles**:
+  1. Optimal binding site search with `duplexfold` (MFE-based)
+  2. Dot-bracket notation parsing
+  3. Custom matplotlib rendering
 
-### 2. C3 Sensor 프로젝트 (`Projects/C3_Sensor/`)
-- ALU 기반 센서 설계 및 검증
-- dsRNA 이량체 시각화
--候选자 점수화 및 순위 결정
+### 2. C3 Sensor Project (`Projects/C3_Sensor/`)
+- ALU-based sensor design and validation
+- dsRNA dimer visualization
+- Candidate scoring and ranking
 
-## 디렉토리 구조
+## Directory Structure
 
 ```
 ADAR-sensor/
-├── SKILL.md                 # ViennaRNA 시각화 스킬 설명
-├── manifest.json            # 스킬 메타데이터
+├── SKILL.md                 # ViennaRNA visualization skill description
+├── manifest.json            # Skill metadata
 ├── scripts/
-│   ├── visualize_binding.py # 핵심 시각화 엔진
+│   ├── visualize_binding.py # Core visualization engine
 │   ├── viennarna_enhanced.py
 │   └── plot_native_dimer.py
 └── c3_sensor/
@@ -36,24 +36,24 @@ ADAR-sensor/
     └── human_C3_mRNA.fasta
 ```
 
-## 사용법
+## Usage
 
-### 센서 결합 시각화
+### Sensor Binding Visualization
 ```bash
 python scripts/visualize_binding.py --mRNA <target_mRNA.fasta> --sensor <sensor_sequence>
 ```
 
-### C3 센서 분석
+### C3 Sensor Analysis
 ```bash
 python c3_sensor/visualize_c3_elite.py
 ```
 
-## 과학적 배경
+## Scientific Background
 
-- **ADAR (Adenosine Deaminase Acting on RNA)**: 전사후 RNA 편집 효소
-- **C3 ALU 미메틱 센서**: ALU 서열 기반 설계된 센서
-- **ViennaRNA**: RNA 이차구조 예측 및 분석을 위한 물리화학적 모델
+- **ADAR (Adenosine Deaminase Acting on RNA)**: Post-transcriptional RNA editing enzyme
+- **C3 ALU Mimetic Sensor**: Sensor designed based on ALU sequences
+- **ViennaRNA**: Physicochemical model for RNA secondary structure prediction and analysis
 
-## 라이선스
+## License
 
-연구용으로만 사용하세요.
+For research use only.
