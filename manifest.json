@@ -1,0 +1,17 @@
+{
+  "name": "viennarna-visualization",
+  "version": "1.0.0",
+  "description": "ViennaRNA 기반 RNA 이차구조 시각화 도구",
+  "author": "System",
+  "scripts": {
+    "plot": "scripts/plot_native_dimer.py",
+    "visualize": "scripts/visualize_binding.py",
+    "engine": "scripts/viennarna_enhanced.py"
+  },
+  "dependencies": [
+    "viennarna",
+    "matplotlib"
+  ],
+  "enabled": true,
+  "type": "bioinformatics"
+}
